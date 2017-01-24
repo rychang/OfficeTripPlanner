@@ -1,7 +1,13 @@
 @(message: String)
 
-@main("Welcome to Play") {
+@main("Welcome to Play 2.0") {
 
-    @play20.welcome(message, style = "Java")
+    <div class="navbar navbar-fixed-top">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <a id="titleLink" class="brand" href="/">@message.toUpperCase</a>
+            </div>
+        </div>
+    </div>
 
 }
