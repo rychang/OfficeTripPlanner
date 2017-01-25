@@ -23,7 +23,8 @@ public class Application extends Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
-    @Inject private TripService tripService;
+    @Inject
+    private TripService tripService;
 
     /*
     public Result index() {

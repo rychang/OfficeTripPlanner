@@ -1,6 +1,6 @@
 package controllers;
 
-import org.springframework.beans.factory.annotation.Autowired;
+
 import play.mvc.Controller;
 import models.Foo;
 import models.FooForm;
@@ -23,7 +23,7 @@ public class TestApplication extends Controller {
     Logger logger = LoggerFactory.getLogger(TestApplication.class);
 
 
-    @Autowired
+    @Inject
     private FooService fooService;
 
     public Result foo() {
@@ -42,10 +42,9 @@ public class TestApplication extends Controller {
 
         FooForm fooForm = form.get();
         Foo food = new Foo(fooForm.getRandomNumber(), fooForm.getDate1(), fooForm.getDate2());
-        logger.error("is null" + (fooService == null));
         fooService.save(food);
 
-        return ok(bar.render());
+        return ok(foo.render());
     }
 
 
