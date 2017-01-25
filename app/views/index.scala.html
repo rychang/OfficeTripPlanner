@@ -1,13 +1,15 @@
-@(message: String)
+@(formData: Form[models.TripForm],
+        offices: List[String])
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
 
-@main("Welcome to Play 2.0") {
 
-    <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-            <div class="container-fluid">
-                <a id="titleLink" class="brand" href="/">@message.toUpperCase</a>
-            </div>
-        </div>
-    </div>
+@import helper.form
+@import helper._
+@import models._
+@import helper.select
+
+
+@main("Welcome to the SoFi Business Trip Planner") {
 
 }
