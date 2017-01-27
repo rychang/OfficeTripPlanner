@@ -7,9 +7,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -35,23 +32,24 @@ public class TripServiceImpl implements TripService {
 
     @Transactional
     public Integer save(Trip trip) {
-        if (trip == null) {
-            throw new IllegalArgumentException();
+        try {
+            if (trip == null) {
+                throw new IllegalArgumentException();
+            }
+            Set<Trip> tripsAll = getAllStoredTrips();
+            if (tripsAll.stream().filter(tripDb -> tripDb.getLocation() == trip.getLocation()
+                    && tripDb.getStartDate() == trip.getStartDate() && tripDb.getEndDate() == trip.getEndDate()).count() > 0) {
+                throw new IllegalArgumentException("Dates are already booked");
+            }
+            em.persist(trip);
+            logger.debug("Trip to location {} for the duration of {} to {} and id {} saved to db.", trip.getLocation(), trip.getStartDate(), trip.getEndDate(), trip.getId());
+            return trip.getId();
+        } catch (Exception e){
+            return -1;
         }
-        Set<Trip> tripsAll = getAllStoredTrips();
-        if (tripsAll.stream().filter(storedTrip -> storedTrip.getLocation().equals(trip.getLocation())
-                                     && storedTrip.getStart() == trip.getStart()).count() > 0) {
-            throw new IllegalArgumentException("Date is already booked");
-        }
-
-        em.persist(trip);
-        logger.debug("Trip to location {} for the duration of {} to {} and id {} saved to db.", trip.getLocation(), trip.getStart(), trip.getEnd(), trip.getId());
-        return trip.getId();
     }
 
     @Transactional
-
-
     public Set<Trip> getAllStoredTrips() {
         CriteriaQuery<Trip> query = em.getCriteriaBuilder().createQuery(Trip.class);
         query.from(Trip.class);

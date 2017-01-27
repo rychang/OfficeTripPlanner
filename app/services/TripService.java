@@ -8,8 +8,8 @@ public interface TripService {
     /**
      * Gets a Trip instance by its primary key identifier.
      *
-     * @param An identifying integer presumably associated with a trip.
-     * @return Trip instance, if any, associated with the parameter.
+     * @param id Primary key of trip.
+     * @return trip instance, if any, for the given key.
      */
     Trip getTripById(Integer id);
 

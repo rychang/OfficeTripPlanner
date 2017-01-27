@@ -3,14 +3,11 @@
 # ~~~~
 
 # Homework
-#GET     /                           controllers.Application.index()
-#GET		/trip						controllers.Application.getAllTrips()
-#GET		/trip/:id					controllers.Application.getTrip(id)
-#POST    /trip                       controllers.Application.tripMaker()
+GET     /                           @controllers.Application.index()
+GET		/trip						@controllers.Application.getAllTrips()
+GET     /trip/:id                   @controllers.Application.getWeather(id: Integer)
+POST    /add                        @controllers.Application.tripMaker()
 
-GET		/foo						@controllers.TestApplication.foo()
-
-POST	/bar						@controllers.TestApplication.bar()
 
 # Map static resources from the /public folder to the /assets URL path
 GET     /assets/*file               controllers.Assets.at(path="/public", file)

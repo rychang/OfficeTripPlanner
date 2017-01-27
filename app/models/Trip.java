@@ -6,64 +6,60 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+
+import java.util.Date;
 
 @Entity
-@Table(name = "Trips", uniqueConstraints = {@UniqueConstraint(columnNames = {"location", "startDate", "endDate"})})
+@Table(name = "Trips")
 public class Trip {
+
+    
+
 
     @Id
     @Column(name = "id")
     @GeneratedValue
     private Integer id;
 
-    @Column(nullable = false)
+    @Column(name = "location", nullable = false)
     private  String location;
 
-    @Column(nullable = false)
+    @Column(name = "startDate", unique =  true, nullable = false)
     private String startDate;
 
-    @Column(nullable = false)
+    @Column(name = "endDate", unique = true, nullable = false)
     private String endDate;
 
     public Integer getId() {
         return id;
     }
 
+    public String getLocation() { return location; }
+
+    public String getStartDate() { return startDate; }
+
+    public String getEndDate() { return endDate; }
+
     public void setId(Integer id) {
         this.id = id;
     }
 
-    public String getLocation() {
-        return location;
-    }
+    public void setLocation(String location) { this.location = location; }
 
-    public void setLocations(String location) {
-        this.location = location;
-    }
 
-    public String getStart() {
-        return startDate;
-    }
+    public void setStartDate(String startDate) { this.startDate = startDate; }
 
-    public void setStart(String startDate) {
-        this.startDate = startDate;
-    }
 
-    public String getEnd() {
-        return endDate;
-    }
+    public void setEndDate(String endDate) { this.endDate = endDate; }
 
-    public void setEnd(String endDate) {
-        this.endDate = endDate;
-    }
-
+    /*
     @Override
     public String toString() {
         return "Historical weather details for" + location +
-               "office starting st " +
+               "office starting at " +
                startDate +
                ".";
     }
+    */
 
 }

@@ -1,4 +1,4 @@
-@(highAvg: String, lowAvg: String, precip: String, cloudCover: String, trip: Trip)
+@(allTrips: Set[Trip])
 
 @main("All your trips") {
     <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
@@ -24,32 +24,14 @@
                     <th>Start Date</th>
                     <th>End Date</th>
                 </tr>
+                @for(trip <- allTrips){
                     <tr>
-                        <td>@trip.getLocation()</td>
+                        <td><a href = @routes.Application.getWeather(trip.getId) a>@trip.getLocation()</td>
                         <td>@trip.getStartDate()</td>
                         <td>@trip.getEndDate()</td>
                     </tr>
-            </table>
-            <table class = "table table-sm table-inverse">
-                <thead>
-                    <tr>
-                        <th>Average Low Temperature (F)</th>
-                        <th>Average High Temperature (F)</th>
-                        <th>Average Precipitation Chance</th>
-                        <th>Average Cloud Coverage</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>@lowAvg</td>
-                        <td>@highAvg</td>
-                        <td>@precip</td>
-                        <td>@cloudCover</td>
-
-                </tbody>
+                }
             </table>
         </div>
     </div>
-
-
 }

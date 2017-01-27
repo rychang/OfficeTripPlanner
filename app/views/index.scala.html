@@ -1,40 +1,52 @@
-@(formData: Form[models.TripForm])
-<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/css/bootstrap.min.css" integrity="sha384-rwoIResjU2yc3z8GV/NPeZWAv56rSmLldC3R/AZzGRnGxQQKnKkoFVhFQhNUwEyJ" crossorigin="anonymous">
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.6/js/bootstrap.min.js" integrity="sha384-vBWWzlZJ8ea9aCX4pEW3rVHjgjt7zpkNpZk+02D9phzyeVkE+jo0ieGizqPLForn" crossorigin="anonymous"></script>
+@(form: play.data.Form[TripForm])
 
 
-@import helper.form
-@import helper._
-@import models._
-@import helper.select
+@main("Welcome to Sofi Trip Planner") {
 
+    @if(form.hasGlobalErrors) {
+        <div class="alert alert-danger">
+            <p class="small">
+                <span class="error">@Messages(form.globalError.message)</span>
+            </p>
+        </div>
+    }
 
-@main("Welcome to the SoFi Business Trip Planner") {
-    @helper.form(action = routes.TestApplication.bar()) {
-        <form>
-            <div class="form-group">
-                <label for="exampleSelect1">Example select</label>
-                <select class="form-control" name = "randomNumber" id="exampleSelect1">
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
-                    <option>4</option>
-                    <option>5</option>
-                </select>
+    @helper.form(action = routes.Application.tripMaker()) {
+        <nav class="navbar navbar-toggleable-md navbar-light bg-faded">
+            <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <a class="navbar-brand" href="/">Main Page</a>
+
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav mr-auto">
+                    <li class="nav-item active">
+                        <a class="nav-link" href="/trip">All Trips<span class="sr-only">(current)</span></a>
+                    </li>
+                </ul>
             </div>
-            <div class="form-group row">
-                <label for="example-date-input" class="col-2 col-form-label"> Start Date</label>
-                <div class="col-10">
-                    <input class="form-control" type="date" name = "date1" value="2017-01-01" id="example-date-input1">
+        </nav>
+
+        <div class="container">
+            <form class="form-inline">
+                <div class="form-inline">
+                    <label class="mx-sm-2 my-sm-2" for="inlineFormCustomSelect">Select Office Location</label>
+                    <select class="form-control" name="officeLoc" id="exampleSelect1">
+                        <option>Helena, MT</option>
+                        <option>San Francisco, CA</option>
+                        <option>The Woodlands, TX</option>
+                        <option>Salt Lake City, UT</option>
+                        <option>Healdsburg, CA</option>
+                        <option>New York, NY</option>
+                        <option>Reston, VA</option>
+                    </select>
+                    <label for="example-date-input" class="mx-sm-2 my-sm-2"> Start Date</label>
+                        <input class="form-control" type="date" name="startDate" value="2017-01-01" min="2017-01-01" max="2018-01-01" id="example-date-input1">
+                    <label for="example-date-input" class="mx-sm-2 my-sm-2">End Date</label>
+                        <input class="form-control"  type="date" name="endDate" value="2017-01-01" min="2017-01-01" max="2018-01-01d"  id="example-date-input2">
                 </div>
-            </div>
-            <div class="form-group row">
-                <label for="example-date-input" class="col-2 col-form-label">End Date</label>
-                <div class="col-10">
-                    <input class="form-control"  type="date" name = "date2" value="2017-01-01" id="example-date-input2">
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">Submit</button>
-        </form>
+                <button type="submit" class="ml-sm-2 btn btn-primary">Submit</button>
+            </form>
+        </div>
     }
 }

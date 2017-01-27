@@ -24,15 +24,15 @@ public class TripForm {
         return endDate;
     }
 
-    public void setEnd(String endDate) {
-        this.endDate = endDate;
-    }
-
     public void setOfficeLoc(String officeLoc) {
         this.officeLoc = officeLoc;
     }
 
-    public void setStart(String startDate) {
+    public void setEndDate(String endDate) {
+        this.endDate = endDate;
+    }
+
+    public void setStartDate(String startDate) {
         this.startDate = startDate;
     }
 

@@ -2,12 +2,16 @@ package services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import conf.TestDataConf;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import services.WeatherService;
-import services.WeatherServiceImpl;
+import conf.AppConf;
+
+import org.springframework.test.context.ContextConfiguration;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+
+
 
 import javax.inject.Inject;
 import java.io.IOException;
@@ -16,10 +20,19 @@ import java.net.URL;
 /**
  * Created by kohaus on 1/27/17.
  */
-public class WeatherServiceTest {
 
-    private ObjectMapper objectMapper = new ObjectMapper();
-    private WeatherService weatherService = new WeatherServiceImpl();
+
+@ContextConfiguration(classes = {
+        AppConf.class, TestDataConf.class
+})
+
+public class WeatherServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
+
+    @Inject
+    private ObjectMapper objectMapper;
+
+    @Inject
+    private WeatherService weatherService;
 
     @Test
     public void getLowAvgTest() {
