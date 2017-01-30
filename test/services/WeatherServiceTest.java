@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import conf.TestDataConf;
 import org.junit.Test;
-import static org.junit.Assert.*;
 
 import conf.AppConf;
 
@@ -12,8 +11,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
 import javax.inject.Inject;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+
+import static org.junit.Assert.assertTrue;
 
 /**
  * Created by kohaus on 1/27/17.
@@ -32,9 +34,9 @@ public class WeatherServiceTest extends AbstractTransactionalJUnit4SpringContext
     @Test
     public void getLowAvgTest() {
         try {
-            URL weather = new URL("http://api.wunderground.com/api/343dc8e3f2c2c4d7/planner_01270129/q/OK/Oklahoma_City.json");
-            JsonNode test = objectMapper.readTree(weather);
-            assertTrue(weatherService.getHighAvg(test).equals("61"));
+            JsonNode test = objectMapper.readTree(new File("test/resources/test.json"));
+            System.out.println("Low: " + weatherService.getLowAvg(test));
+            assertTrue(weatherService.getLowAvg(test).equals("32"));
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -43,20 +45,20 @@ public class WeatherServiceTest extends AbstractTransactionalJUnit4SpringContext
     @Test
     public void getHighAvgTest() {
         try {
-            URL weather = new URL("http://api.wunderground.com/api/343dc8e3f2c2c4d7/planner_01270129/q/OK/Oklahoma_City.json");
-            JsonNode test = objectMapper.readTree(weather);
-            assertTrue(weatherService.getLowAvg(test).equals("33"));
-        } catch (IOException e){
+            JsonNode test = objectMapper.readTree(new File("test/resources/test.json"));
+            System.out.println("High: " + weatherService.getHighAvg(test));
+            assertTrue(weatherService.getHighAvg(test).equals("61"));
+        } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     @Test
     public void getPrecipPercentageTest() {
         try {
-            URL weather = new URL("http://api.wunderground.com/api/343dc8e3f2c2c4d7/planner_01270129/q/OK/Oklahoma_City.json");
-            JsonNode test = objectMapper.readTree(weather);
-            assertTrue(weatherService.getPrecipPercentage(test).equals("20"));
+            JsonNode test = objectMapper.readTree(new File("test/resources/test.json"));
+            assertTrue(weatherService.getPrecipPercentage(test).equals("17"));
         } catch (IOException e){
             e.printStackTrace();
         }
@@ -65,8 +67,7 @@ public class WeatherServiceTest extends AbstractTransactionalJUnit4SpringContext
     @Test
     public void getCloudCoverTest() {
         try {
-            URL weather = new URL("http://api.wunderground.com/api/343dc8e3f2c2c4d7/planner_01270129/q/OK/Oklahoma_City.json");
-            JsonNode test = objectMapper.readTree(weather);
+            JsonNode test = objectMapper.readTree(new File("test/resources/test.json"));
             assertTrue(weatherService.getCloudCover(test).equals("Mostly sunny"));
         } catch (IOException e){
             e.printStackTrace();
