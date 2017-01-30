@@ -2,18 +2,23 @@ package services;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.JsonNodeFactory;
 import models.Trip;
+import org.apache.http.HttpEntity;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 
 import javax.inject.Inject;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.net.URLConnection;
+
+import org.apache.http.client.fluent.Request;
+
+import static org.reflections.Reflections.log;
 
 /**
  * Created by kohaus on 1/27/17.
@@ -21,6 +26,8 @@ import java.net.URLConnection;
 @Service
 public class WeatherServiceImpl implements WeatherService {
     private static final Logger logger = LoggerFactory.getLogger(TripServiceImpl.class);
+
+    private static final int TIMEOUT_MS = 5*1000;
 
     @Inject ObjectMapper objectMapper;
 
@@ -52,24 +59,32 @@ public class WeatherServiceImpl implements WeatherService {
         String stateAbv = Loc.substring(Loc.lastIndexOf(",")+2);
         String city = Loc.substring(0,Loc.lastIndexOf(","));
 
-        String all = "";
+        String url = "http://api.wunderground.com/api/343dc8e3f2c2c4d7/planner_"+ urlStartDate + urlEndDate
+                + "/q/"+ stateAbv +"/" + city +".json";
+
         JsonNode root;
         try {
-            URL weather = new URL("http://api.wunderground.com/api/343dc8e3f2c2c4d7/planner_"+ urlStartDate + urlEndDate
-                    + "/q/"+ stateAbv +"/" + city +".json");
-            URLConnection cc = weather.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(cc.getInputStream()));
-            String inputLine;
-
-            while ((inputLine = in.readLine()) != null)
-                all += inputLine;
-            in.close();
-            root = objectMapper.readTree(all);
-
+            log.trace("calling preciseid webservice: {}", url);
+            root = Request.Get(url)
+                    .socketTimeout(TIMEOUT_MS)
+                    .connectTimeout(TIMEOUT_MS)
+                    .execute()
+                    .handleResponse(responseHandler);
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("Unable to connect to preciseid service for request: {}", url, e);
             return null;
         }
         return root;
     }
+
+    private ResponseHandler<JsonNode> responseHandler = (org.apache.http.HttpResponse response) -> {
+        StatusLine statusLine = response.getStatusLine();
+        HttpEntity entity = response.getEntity();
+        if (statusLine.getStatusCode() >= 300 || entity == null || entity.getContentLength() == 0) {
+            return JsonNodeFactory.instance.nullNode();
+        }
+
+        return new ObjectMapper().readValue(EntityUtils.toString(entity), JsonNode.class);
+    };
+
 }
