@@ -44,35 +44,23 @@ public class TripServiceTest extends AbstractTransactionalJUnit4SpringContextTes
 
     @Test
     public void getTripByIdTest(){
-            Trip idTrip = new Trip();
-            idTrip.setLocation("Chester, CT");
-            idTrip.setStartDate("2017-02-14");
-            idTrip.setEndDate("2017-02-28");
-            Integer testInt = tripService.save(idTrip);
-            Trip test = tripService.getTripById(testInt);
-            assertEquals(idTrip.getLocation(),test.getLocation());
+        Trip idTrip = new Trip();
+        idTrip.setLocation("Chester, CT");
+        idTrip.setStartDate("2017-02-14");
+        idTrip.setEndDate("2017-02-28");
+        Integer testInt = tripService.save(idTrip);
+        Trip test = tripService.getTripById(testInt);
+        assertEquals(idTrip.getLocation(),test.getLocation());
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void getTripByNullTest() {
-        try {
-            tripService.getTripById(null);
-            // Next line should never be reached
-            fail();
-        } catch (IllegalArgumentException ignored) {
-
-        }
+        tripService.getTripById(null);
     }
 
-    @Test
+    @Test(expected = IllegalArgumentException.class)
     public void getTripByNegativeTest() {
-        try {
-            tripService.getTripById(-1);
-            // Next line should never be reached
-            fail();
-        } catch (IllegalArgumentException ignored) {
-
-        }
+        tripService.getTripById(-1);
     }
 
     @Test
@@ -83,21 +71,17 @@ public class TripServiceTest extends AbstractTransactionalJUnit4SpringContextTes
             assertFalse(testTrip == null);
     }
 
-    @Test
+    @Test(expected=IllegalArgumentException.class)
     public void testNullSave() {
-        try {
-            Trip trip = null;
-            Integer returnId = tripService.save(trip);
-        } catch (IllegalArgumentException ignored) {
-
-        }
+        Trip trip = null;
+        tripService.save(trip);
     }
 
     @Test
     public void getAllStoredTripsTest(){
-            createTrip();
-            Set<Trip> trips = tripService.getAllStoredTrips();
-            assertFalse(trips.isEmpty());
+        createTrip();
+        Set<Trip> trips = tripService.getAllStoredTrips();
+        assertFalse(trips.isEmpty());
     }
 
     @Test
