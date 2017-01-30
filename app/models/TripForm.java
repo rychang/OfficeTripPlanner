@@ -7,9 +7,10 @@ public class TripForm {
     @Required(message = "You must select on office location.")
     private String officeLoc;
 
-    @Required(message = "You must select a start date for you trip.")
+    @Required(message = "You must select a start date for your trip.")
     private String startDate;
 
+    @Required(message = "You must select an end date for your trip.")
     private String endDate;
 
     public String getOfficeLoc() {

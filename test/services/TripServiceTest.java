@@ -2,8 +2,11 @@ package services;
 
 import conf.AppConf;
 import conf.TestDataConf;
+
 import models.Trip;
+
 import org.junit.Test;
+
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 
@@ -13,6 +16,8 @@ import java.util.Set;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.fail;
+
 
 /**
  * Created by kohaus on 1/27/17.
@@ -49,6 +54,28 @@ public class TripServiceTest extends AbstractTransactionalJUnit4SpringContextTes
     }
 
     @Test
+    public void getTripByNullTest() {
+        try {
+            tripService.getTripById(null);
+            // Next line should never be reached
+            fail();
+        } catch (IllegalArgumentException ignored) {
+
+        }
+    }
+
+    @Test
+    public void getTripByNegativeTest() {
+        try {
+            tripService.getTripById(-1);
+            // Next line should never be reached
+            fail();
+        } catch (IllegalArgumentException ignored) {
+
+        }
+    }
+
+    @Test
     public void saveTest(){
             Integer testID = createTrip();
             //Verify the save
@@ -57,9 +84,24 @@ public class TripServiceTest extends AbstractTransactionalJUnit4SpringContextTes
     }
 
     @Test
+    public void testNullSave() {
+        try {
+            Trip trip = null;
+            Integer returnId = tripService.save(trip);
+        } catch (IllegalArgumentException ignored) {
+
+        }
+    }
+
+    @Test
     public void getAllStoredTripsTest(){
             createTrip();
             Set<Trip> trips = tripService.getAllStoredTrips();
             assertFalse(trips.isEmpty());
+    }
+
+    @Test
+    public void getAllStoredTripsBadTest(){
+
     }
 }

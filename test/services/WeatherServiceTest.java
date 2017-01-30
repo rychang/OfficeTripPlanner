@@ -35,7 +35,6 @@ public class WeatherServiceTest extends AbstractTransactionalJUnit4SpringContext
     public void getLowAvgTest() {
         try {
             JsonNode test = objectMapper.readTree(new File("test/resources/test.json"));
-            System.out.println("Low: " + weatherService.getLowAvg(test));
             assertTrue(weatherService.getLowAvg(test).equals("32"));
         } catch (IOException e){
             e.printStackTrace();
@@ -46,7 +45,6 @@ public class WeatherServiceTest extends AbstractTransactionalJUnit4SpringContext
     public void getHighAvgTest() {
         try {
             JsonNode test = objectMapper.readTree(new File("test/resources/test.json"));
-            System.out.println("High: " + weatherService.getHighAvg(test));
             assertTrue(weatherService.getHighAvg(test).equals("61"));
         } catch (IOException e) {
             e.printStackTrace();

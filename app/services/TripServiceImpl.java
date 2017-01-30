@@ -39,8 +39,9 @@ public class TripServiceImpl implements TripService {
             Set<Trip> tripsAll = getAllStoredTrips();
             if (tripsAll.stream().filter(tripDb -> tripDb.getLocation() == trip.getLocation()
                     && tripDb.getStartDate() == trip.getStartDate() && tripDb.getEndDate() == trip.getEndDate()).count() > 0) {
-                throw new IllegalArgumentException("Dates are already booked");
+                throw new IllegalArgumentException("Trips Already exist");
             }
+
             em.persist(trip);
             logger.debug("Trip to location {} for the duration of {} to {} and id {} saved to db.", trip.getLocation(), trip.getStartDate(), trip.getEndDate(), trip.getId());
             return trip.getId();
