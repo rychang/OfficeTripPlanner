@@ -1,4 +1,13 @@
-This is your new Play application
-=================================
+In the beginning this project was created.
+This has made a lot of people very angry
+and been widely regarded as a bad move.
+==========================================
 
-This file will be packaged with your application, when using `activator dist`.
+This web app allows the user to select a SoFi
+office location and the dates they will be
+there.
+It stores this "trip" in a database and allows
+the user to view all trips as wells as look
+at a specific trip to see some historical
+averages about the location for that date
+window.
