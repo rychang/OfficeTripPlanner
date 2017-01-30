@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import models.Trip;
 import models.TripForm;
-import play.mvc.Controller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,25 +22,23 @@ import java.util.Set;
 import javax.inject.Inject;
 
 import play.data.Form;
-import play.mvc.*;
+import play.mvc.Result;
 
 import services.TripService;
 import services.WeatherService;
-import views.html.*;
+
+import views.html.index;
+import views.html.trip;
+import views.html.weather;
 
 @org.springframework.stereotype.Controller
-public class Application extends Controller {
+public class Application extends play.mvc.Controller {
 
     private static final Logger logger = LoggerFactory.getLogger(Application.class);
 
-    @Inject
-    private TripService tripService;
+    @Inject private TripService tripService;
 
-    @Inject
-    private WeatherService weatherService;
-
-    @Inject
-    private ObjectMapper objectMapper;
+    @Inject private WeatherService weatherService;
 
     public Result index() {
         return ok(index.render(Form.form(TripForm.class)));
@@ -50,10 +47,12 @@ public class Application extends Controller {
     public Result tripMaker() {
         Form<TripForm> formData = Form.form(TripForm.class).bindFromRequest();
 
-        if(formData.hasErrors() || formData.hasGlobalErrors()){
-            logger.error(String.valueOf(formData.errors()));
+        if (formData.hasErrors() || formData.hasGlobalErrors()) {
+            logger.debug(String.valueOf(formData.errors()));
+            formData.reject("Form has errors");
             return badRequest(index.render(Form.form(TripForm.class)));
         }
+
         TripForm tripForm = formData.get();
         Trip trip = new Trip();
 
@@ -75,14 +74,14 @@ public class Application extends Controller {
             }
 
         } catch (ParseException e){
-            formData.reject("There was an error ¯\\_(ツ)_/¯");
+            logger.error("Un-parsable date string submitted. Start date: {}, End date: {}", tripForm.getStartDate(), tripForm.getEndDate());
+            formData.reject("Dates not parsable");
             return badRequest(index.render(Form.form(TripForm.class)));
         }
 
         trip.setLocation(tripForm.getOfficeLoc());
         trip.setStartDate(tripForm.getStartDate());
         trip.setEndDate(tripForm.getEndDate());
-
 
         try {
             tripService.save(trip);
@@ -100,37 +99,10 @@ public class Application extends Controller {
         return ok(trip.render(tripSet));
     }
 
+
     public Result getWeather(Integer id) {
         Trip trip = tripService.getTripById(id);
-
-        String urlStartDate = trip.getStartDate().replaceAll("-", "");
-        urlStartDate = urlStartDate.substring(4);
-
-        String urlEndDate = trip.getEndDate().replaceAll("-","");
-        urlEndDate = urlEndDate.substring(4);
-
-        String Loc = trip.getLocation().replaceAll(" ","_");
-        String stateAbv = Loc.substring(Loc.lastIndexOf(",")+2);
-        String city = Loc.substring(0,Loc.lastIndexOf(","));
-
-        String all = "";
-        JsonNode root;
-        try {
-            URL weather = new URL("http://api.wunderground.com/api/343dc8e3f2c2c4d7/planner_"+ urlStartDate + urlEndDate
-                    + "/q/"+ stateAbv +"/" + city +".json");
-            URLConnection cc = weather.openConnection();
-            BufferedReader in = new BufferedReader(new InputStreamReader(cc.getInputStream()));
-            String inputLine;
-
-            while ((inputLine = in.readLine()) != null)
-                all += inputLine;
-            in.close();
-            root = objectMapper.readTree(all);
-        } catch (IOException e) {
-
-            e.printStackTrace();
-            return null;
-        }
+        JsonNode root = weatherService.getJson(trip);
 
         return ok(weather.render(weatherService.getHighAvg(root), weatherService.getLowAvg(root),weatherService.getPrecipPercentage(root),weatherService.getCloudCover(root), trip));
     }

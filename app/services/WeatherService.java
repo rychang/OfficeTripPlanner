@@ -1,6 +1,7 @@
 package services;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import models.Trip;
 
 /**
  * Created by kohaus on 1/27/17.
@@ -33,4 +34,11 @@ public interface WeatherService {
      * @return String parsed from the JSON that is the average Cloud Coverage for the date window
      */
     String getCloudCover(JsonNode obj);
+
+    /**
+     *
+     * @param trip
+     * @return
+     */
+    JsonNode getJson(Trip trip);
 }

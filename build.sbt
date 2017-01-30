@@ -6,13 +6,6 @@ lazy val root = (project in file(".")).enablePlugins(PlayJava)
 
 scalaVersion := "2.11.6"
 
-
-libraryDependencies += "org.webjars" % "jquery" % "1.11.2"
-
-libraryDependencies += "org.webjars" % "bootstrap" % "2.1.1"
-
-libraryDependencies += "org.apache.httpcomponents" % "fluent-hc" % "4.5.2"
-
 libraryDependencies ++= Seq(
   javaJdbc,
   cache,
@@ -31,5 +24,6 @@ libraryDependencies ++= Seq(
   "com.fasterxml.jackson.core" % "jackson-annotations" % "2.7.3",
   "com.fasterxml.jackson.core" % "jackson-databind" % "2.7.3",
   "com.fasterxml.jackson.core" % "jackson-core" % "2.7.3",
+  "org.webjars" % "bootstrap" % "2.1.1",
   "org.slf4j" % "slf4j-api" % "1.7.21"
 )

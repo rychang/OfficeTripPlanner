@@ -23,8 +23,7 @@ import static org.junit.Assert.assertFalse;
 
 public class TripServiceTest extends AbstractTransactionalJUnit4SpringContextTests {
 
-    @Inject
-    private TripService tripService;
+    @Inject private TripService tripService;
 
     public Integer createTrip() {
         Set<Trip> trip = tripService.getAllStoredTrips();
@@ -40,7 +39,6 @@ public class TripServiceTest extends AbstractTransactionalJUnit4SpringContextTes
 
     @Test
     public void getTripByIdTest(){
-        try {
             Trip idTrip = new Trip();
             idTrip.setLocation("Chester, CT");
             idTrip.setStartDate("2017-02-14");
@@ -48,30 +46,20 @@ public class TripServiceTest extends AbstractTransactionalJUnit4SpringContextTes
             Integer testInt = tripService.save(idTrip);
             Trip test = tripService.getTripById(testInt);
             assertEquals(idTrip.getLocation(),test.getLocation());
-        } catch (Exception ignored) {
-
-        }
     }
 
     @Test
     public void saveTest(){
-        try {
             Integer testID = createTrip();
             //Verify the save
             Trip testTrip = tripService.getTripById(testID);
             assertFalse(testTrip == null);
-        } catch (Exception ignored) {
-
-        }
     }
 
     @Test
     public void getAllStoredTripsTest(){
-        try {
             createTrip();
             Set<Trip> trips = tripService.getAllStoredTrips();
             assertFalse(trips.isEmpty());
-        } catch (Exception ignored) {
-        }
     }
 }
